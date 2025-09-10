@@ -6,6 +6,9 @@ module.exports = (err, req, res, next) => {
     case EErrors.INVALID_TYPES_ERROR:
       res.status(400).send({ status: 'error', error: err.cause });
       break;
+    case EErrors.DATABASE_ERROR:
+      res.status(401).send({ status: 'error', error: err.cause });
+      break;
     default:
       res.status(500).send({ status: 'error', message: 'Internal server error' });
   }

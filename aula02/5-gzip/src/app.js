@@ -1,6 +1,9 @@
 const express = require('express');
+const compression = require('express-compression');
 
 const app = express();
+
+app.use(compression());
 
 app.get('/stringridiculamentegrande', (req, res) => {
   let string = 'Olá Coders, sou uma string ridiculamente grande!';

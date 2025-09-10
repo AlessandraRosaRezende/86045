@@ -1,6 +1,12 @@
 const express = require('express');
+const compression = require('express-compression');
 
 const app = express();
+
+app.use(compression({
+  brotli: { enabled: true },
+  zlib: {}
+}))
 
 app.get('/stringridiculamentegrande', (req, res) => {
   let string = 'Olá Coders, sou uma string ridiculamente grande!';

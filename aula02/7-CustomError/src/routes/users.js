@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const CustomError = require('../services/errors/CustomError');
 const EErrors = require('../services/errors/enums');
-const generateUserErrorInfo = require('../services/errors/info');
+const { generateUserErrorInfo, generateUserErrorInfoType } = require('../services/errors/info');
 
 const users = [];
 
@@ -14,14 +14,23 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
   const { first_name, last_name, email } = req.body;
 
-  if (!first_name || !last_name || !email || typeof first_name !== 'string' || typeof last_name !== 'string' || typeof email !== 'string') {
+  if (!first_name || !last_name || !email) {
     CustomError.createError({
       name: 'User creation error',
       cause: generateUserErrorInfo({ first_name, last_name, email }),
       message: 'Error trying to create a new user',
       code: EErrors.INVALID_TYPES_ERROR,
     });
-  } 
+  }
+
+  if (typeof first_name !== 'string' || typeof last_name !== 'string' || typeof email !== 'string') {
+    CustomError.createError({
+      name: 'User creation error',
+      cause: generateUserErrorInfoType({ first_name, last_name, email }),
+      message: 'Error trying to create a new user',
+      code: EErrors.DATABASE_ERROR,
+    });
+  }
 
   const user = {
     first_name,
