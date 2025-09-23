@@ -11,7 +11,7 @@ const addLogger = (req, res, next) => {
   } else {
     req.logger = devLog;
   }
-  req.logger.info(`${req.method} na ${req.url} - ${new Date()}`);
+  req.logger.info(`${req.method} na rota ${req.url} - ${new Date()}`);
   next();
 };
 

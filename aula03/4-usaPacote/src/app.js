@@ -1,5 +1,5 @@
 const express = require('express');
-const operacoes = require('mathoperatorpackage');
+const operacoes = require('mathematicoperatorpackage');
 
 const app = express();
 

@@ -9,7 +9,7 @@ const addLog = (req, res, next) => {
   } else {
     req.logger = prodLogger;
   }
-  req.logger.http(`${req.method} ${req.path}`);
+  req.logger.http(`${req.method} na rota ${req.path}`);
   next();
 };
 

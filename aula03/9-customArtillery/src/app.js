@@ -14,6 +14,7 @@ connection();
 const PORT = process.env.PORT || 8080;
 
 app.use('/api/sessao', sessaoRoutes);
+
 app.get('/gerar-usuario-teste', async (req, res) => {
     const nome = faker.person.firstName();
     const sobrenome = faker.person.lastName();

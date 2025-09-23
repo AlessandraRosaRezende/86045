@@ -6,9 +6,11 @@ const app = express();
 app.use(logMid);
 
 app.get('/', (req, res) => {
-  req.logger.warn('Alerta!!!')
+  req.logger.warning('Alerta!!!')
   req.logger.info('Informação')
   req.logger.fatal('Fatal')
+  req.logger.debug('Debug')
+  req.logger.error('Erro')
   res.send('Teste de logger');
 });
 

@@ -10,7 +10,7 @@ const devLogger = winston.createLogger({
   ),
   transports: [
     new winston.transports.Console(),
-    new winston.transports.File({ filename: 'nadaserio.log', level: 'verbose' }),
+    // new winston.transports.File({ filename: 'nadaserio.log', level: 'verbose' }),
   ]
 });
 
@@ -20,7 +20,7 @@ const prodLogger = winston.createLogger({
     winston.format.json()
   ),
   transports: [
-    new winston.transports.Console({ level: 'http' }),
+    // new winston.transports.Console({ level: 'http' }),
     new winston.transports.File({ filename: 'error.log', level: 'warn' }),
   ]
 });

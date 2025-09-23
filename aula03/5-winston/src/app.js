@@ -5,7 +5,10 @@ const app = express();
 
 app.use(logMid);
 
-app.get('/', (req, res) => {
+app.get('/hello', (req, res) => {
+  req.logger.info('Hello route accessed');
+  req.logger.warn('This is a warning message');
+  req.logger.error('This is an error message');
   res.send('Hello, world!');
 });
 
