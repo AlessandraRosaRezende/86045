@@ -29,26 +29,23 @@ if (cluster.isPrimary) {
   });
 
   // ESSA PARTE VEM DEPOIS
-  app.get('/simpleOperation', (req, res) => {
-    let sum = 0;
-    for (let i = 0; i < 1000; i++) {
-      sum += i;
-    }
-    res.send({ status: 'success', message: `O worker ${process.pid} atendeu a requisição e o resultado é ${sum}` });
-  });
+  // app.get('/simpleOperation', (req, res) => {
+  //   let sum = 0;
+  //   for (let i = 0; i < 1000; i++) {
+  //     sum += i;
+  //   }
+  //   res.send({ status: 'success', message: `O worker ${process.pid} atendeu a requisição e o resultado é ${sum}` });
+  // });
 
-  app.get('/complexOperation', (req, res) => {
-    let sum = 0;
-    for (let i = 0; i < 100000000; i++) {
-      sum += i;
-    }
-    res.send({ status: 'success', message: `O worker ${process.pid} atendeu a requisição e o resultado é ${sum}` });
-  });
+  // app.get('/complexOperation', (req, res) => {
+  //   let sum = 0;
+  //   for (let i = 0; i < 100000000; i++) {
+  //     sum += i;
+  //   }
+  //   res.send({ status: 'success', message: `O worker ${process.pid} atendeu a requisição e o resultado é ${sum}` });
+  // });
 
   app.listen(8080, () => {
     console.log(`Worker PID: ${process.pid} - escutando na porta 8080`);
   });
 }
-
-// artillery quick --count 40 --num 50 http://localhost:8080/simpleOperation -o simple.json
-// artillery quick --count 40 --num 50 http://localhost:8080/complexOperation -o complex.json

@@ -44,7 +44,3 @@ if (cluster.isPrimary) {
     console.log(`Worker ${process.pid} ouvindo na porta 8080`);
   });
 }
-
-// docker build -t dockeroperations .
-// docker images
-// docker run -p 8080:8080 dockeroperations

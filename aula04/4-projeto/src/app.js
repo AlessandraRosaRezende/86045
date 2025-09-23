@@ -26,19 +26,3 @@ const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Servidor está rodando na porta ${PORT}`);
 });
-
-// docker tag userscreator alerosa/userscreator:1.0.0
-// docker push alerosa/userscreator:1.0.0
-
-// kubectl version
-// minikube start
-// kubectl cluster-info
-// kubectl config get-contexts
-// kubectl get pods
-
-// kubectl apply -f kubeusers.yaml
-// kubectl get deployments
-// kubectl get pods
-// kubectl get services
-// minikube service list
-// minikube service kubeservice

@@ -28,6 +28,3 @@ if (cluster.isPrimary) {
     console.log(`Worker ${process.pid} ouvindo na porta 8080`);
   });
 }
-
-// kill PID (Mac/Linux)
-// kill -9 PID
