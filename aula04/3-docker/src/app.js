@@ -40,7 +40,7 @@ if (cluster.isPrimary) {
     res.send({ status: 'success', message: `O worker ${process.pid} atendeu a requisição e o resultado é ${sum}` });
   });
 
-  app.listen(8080, () => {
-    console.log(`Worker ${process.pid} ouvindo na porta 8080`);
+  app.listen(8081, () => {
+    console.log(`Worker ${process.pid} ouvindo na porta 8081`);
   });
 }
