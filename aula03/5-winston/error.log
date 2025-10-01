@@ -1,0 +1,8 @@
+{"level":"warn","message":"This is a warning message"}
+{"level":"error","message":"This is an error message"}
+
+{"level":"info","message":"Hello route accessed"}
+{"level":"warn","message":"This is a warning message"}
+{"level":"error","message":"This is an error message"}
+
+{"level":"error","message":"This is an error message"}
