@@ -1,0 +1,378 @@
+openapi: 3.0.1
+info:
+  title: API de adoção de pets
+  version: "1.0"
+servers:
+  - url: http://localhost:8080
+
+paths:
+  # -------------------
+  # 🔑 Sessions
+  # -------------------
+  /api/sessions/register:
+    post:
+      summary: Registro de usuário
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterInput'
+            example:
+              first_name: "João"
+              last_name: "Silva"
+              email: "joao.silva@email.com"
+              password: "123456"
+      responses:
+        "200":
+          description: Usuário registrado com sucesso
+          content:
+            application/json:
+              example:
+                status: "success"
+                payload: "65f01234567890abcdef1234"
+        "400":
+          description: Erro de validação ou usuário já existente
+
+  /api/sessions/login:
+    post:
+      summary: Login de usuário (gera cookie e token JWT)
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInput'
+            example:
+              email: "joao.silva@email.com"
+              password: "123456"
+      responses:
+        "200":
+          description: Login realizado com sucesso (cookie + token no body)
+          headers:
+            Set-Cookie:
+              description: Cookie definido com o JWT
+              schema:
+                type: string
+              example: "coderCookie=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; Path=/; HttpOnly"
+          content:
+            application/json:
+              example:
+                status: "success"
+                message: "Logged in"
+                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+        "400":
+          description: Erro de validação ou senha incorreta
+        "404":
+          description: Usuário não encontrado
+
+  /api/sessions/current:
+    get:
+      summary: Retorna usuário autenticado
+      tags:
+        - Sessions
+      responses:
+        "200":
+          description: Dados do usuário autenticado
+          content:
+            application/json:
+              example:
+                status: "success"
+                payload:
+                  id: "65f01234567890abcdef1234"
+                  first_name: "João"
+                  last_name: "Silva"
+                  email: "joao.silva@email.com"
+                  role: "user"
+        "401":
+          description: Não autenticado
+
+  /api/sessions/unprotectedLogin:
+    post:
+      summary: Login sem proteção (retorna payload completo no token)
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInput'
+            example:
+              email: "joao.silva@email.com"
+              password: "123456"
+      responses:
+        "200":
+          description: Login realizado (sem DTO)
+          content:
+            application/json:
+              example:
+                status: "success"
+                message: "Unprotected Logged in"
+
+  /api/sessions/unprotectedCurrent:
+    get:
+      summary: Retorna usuário autenticado (sem DTO)
+      tags:
+        - Sessions
+      responses:
+        "200":
+          description: Dados completos do usuário (sem DTO)
+          content:
+            application/json:
+              example:
+                status: "success"
+                payload:
+                  _id: "5f9b9b9b9b9b9b9b9b9b9b9b"
+                  first_name: "João"
+                  last_name: "Silva"
+                  email: "joao.silva@email.com"
+                  password: "$2b$10$saltsamplehashedpassword"
+                  role: "user"
+                  pets:
+                    - _id: "65f01234567890abcdef1234"
+
+  # -------------------
+  # 👤 Users
+  # -------------------
+  /api/users:
+    get:
+      summary: Obter todos os usuários
+      tags:
+        - Users
+      responses:
+        "200":
+          description: Lista de usuários obtida com sucesso
+          content:
+            application/json:
+              example:
+                - _id: "5f9b9b9b9b9b9b9b9b9b9b9b"
+                  first_name: "João"
+                  last_name: "Silva"
+                  email: "joao.silva@email.com"
+                  role: "user"
+                  pets:
+                    - _id: "65f01234567890abcdef1234"
+                - _id: "5f8a8a8a8a8a8a8a8a8a8a8a"
+                  first_name: "Maria"
+                  last_name: "Oliveira"
+                  email: "maria.oliveira@email.com"
+                  role: "user"
+                  pets: []
+
+        "500":
+          description: Erro interno do servidor
+
+  /api/users/{uid}:
+    get:
+      summary: Obter usuário por ID
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID do usuário
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Usuário encontrado
+          content:
+            application/json:
+              example:
+                _id: "5f9b9b9b9b9b9b9b9b9b9b9b"
+                first_name: "João"
+                last_name: "Silva"
+                email: "joao.silva@email.com"
+                role: "user"
+                pets:
+                  - _id: "65f01234567890abcdef1234"
+        "404":
+          description: Usuário não encontrado
+    put:
+      summary: Atualizar usuário por ID
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID do usuário
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+            example:
+              first_name: "João Atualizado"
+              last_name: "Silva"
+              email: "joao.silva@novoemail.com"
+              password: "novasenha123"
+      responses:
+        "200":
+          description: Usuário atualizado com sucesso
+          content:
+            application/json:
+              example:
+                _id: "5f9b9b9b9b9b9b9b9b9b9b9b"
+                first_name: "João Atualizado"
+                last_name: "Silva"
+                email: "joao.silva@novoemail.com"
+                role: "user"
+                pets: []
+        "400":
+          description: Erro de validação
+        "404":
+          description: Usuário não encontrado
+    delete:
+      summary: Deletar usuário por ID
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID do usuário
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Usuário deletado com sucesso
+        "404":
+          description: Usuário não encontrado
+
+components:
+  schemas:
+    # ------------ Sessions ------------
+    RegisterInput:
+      type: object
+      required:
+        - first_name
+        - last_name
+        - email
+        - password
+      properties:
+        first_name:
+          type: string
+          example: João
+        last_name:
+          type: string
+          example: Silva
+        email:
+          type: string
+          example: joao.silva@email.com
+        password:
+          type: string
+          example: 123456
+      example:
+        first_name: "João"
+        last_name: "Silva"
+        email: "joao.silva@email.com"
+        password: "123456"
+
+    LoginInput:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: joao.silva@email.com
+        password:
+          type: string
+          example: 123456
+      example:
+        email: "joao.silva@email.com"
+        password: "123456"
+
+    UserDTO:
+      type: object
+      description: Dados básicos retornados no token
+      properties:
+        id:
+          type: string
+          example: 65f01234567890abcdef1234
+        first_name:
+          type: string
+          example: João
+        last_name:
+          type: string
+          example: Silva
+        email:
+          type: string
+          example: joao.silva@email.com
+        role:
+          type: string
+          example: user
+      example:
+        id: "65f01234567890abcdef1234"
+        first_name: "João"
+        last_name: "Silva"
+        email: "joao.silva@email.com"
+        role: "user"
+
+    # ------------ Users ------------
+    User:
+      type: object
+      description: Usuário completo (do MongoDB)
+      properties:
+        _id:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+          default: user
+        pets:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+      example:
+        _id: "5f9b9b9b9b9b9b9b9b9b9b9b"
+        first_name: "João"
+        last_name: "Silva"
+        email: "joao.silva@email.com"
+        password: "$2b$10$saltsamplehashedpassword"
+        role: "user"
+        pets:
+          - _id: "65f01234567890abcdef1234"
+
+    UserInput:
+      type: object
+      description: Esquema de entrada para atualizar usuário
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+          default: user
+      example:
+        first_name: "João Atualizado"
+        last_name: "Silva"
+        email: "joao.silva@novoemail.com"
+        password: "novasenha123"
